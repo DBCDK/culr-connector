@@ -4,9 +4,6 @@ def workerNode = "devel10"
 
 pipeline {
 	agent {label workerNode}
-	triggers {
-		githubPush()
-	}
 	options {
 		timestamps()
 	}
@@ -22,8 +19,8 @@ pipeline {
 		}
 		stage("build") {
 			steps {
-                script {
-                    def status = sh returnStatus: true, script:  """
+				script {
+					def status = sh returnStatus: true, script:  """
                         rm -rf \$WORKSPACE/.repo
                         mvn -B -Dmaven.repo.local=\$WORKSPACE/.repo dependency:resolve dependency:resolve-plugins >/dev/null
                         mvn -B -Dmaven.repo.local=\$WORKSPACE/.repo clean
@@ -38,16 +35,13 @@ pipeline {
 
                     def java = scanForIssues tool: [$class: 'Java']
                     def javadoc = scanForIssues tool: [$class: 'JavaDoc']
-                    publishIssues issues:[java, javadoc], unstableTotalAll:0
+                    publishIssues issues:[java, javadoc], unstableTotalAll:1
 
                     def pmd = scanForIssues tool: [$class: 'Pmd'], pattern: '**/target/pmd.xml'
-                    publishIssues issues:[pmd], unstableTotalAll:0
-
-                    def cpd = scanForIssues tool: [$class: 'Cpd'], pattern: '**/target/cpd.xml'
-                    publishIssues issues:[cpd]
+                    publishIssues issues:[pmd], unstableTotalAll:1
 
                     def spotbugs = scanForIssues tool: [$class: 'SpotBugs'], pattern: '**/target/spotbugsXml.xml'
-                    publishIssues issues:[spotbugs], unstableTotalAll:0
+                    publishIssues issues:[spotbugs], unstableTotalAll:1
 
                     if ( status != 0 ) {
                         currentBuild.result = Result.FAILURE

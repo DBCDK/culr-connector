@@ -151,9 +151,9 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>com.sun.xml.ws</groupId>
+        <groupId>org.jvnet.jax-ws-commons</groupId>
         <artifactId>jaxws-maven-plugin</artifactId>
-        <version>2.3.3</version>
+        <version>2.3</version>
         <executions>
           <execution>
             <phase>generate-resources</phase>
@@ -180,6 +180,16 @@
         <configuration>
           <nohelp>true</nohelp>
           <excludePackageNames>dk.dbc.culrservice.ws</excludePackageNames>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.14.0</version>
+        <configuration>
+          <targetJdk>1.8</targetJdk>
+          <excludeRoots>
+            <excludeRoot>${project.build.directory}/generated-sources</excludeRoot>
+          </excludeRoots>
         </configuration>
       </plugin>
     </plugins>
