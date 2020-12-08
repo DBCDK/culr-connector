@@ -1,0 +1,21 @@
+{
+  "id" : "fe6f28b4-5f9b-3a76-b99d-0a10a610d985",
+  "request" : {
+    "url" : "/1.4/CulrWebService",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToXml" : "<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S=\"http://schemas.xmlsoap.org/soap/envelope/\"><S:Body><ns2:createAccount xmlns:ns2=\"http://ws.culrservice.dbc.dk/\"><agencyId>190976</agencyId><userCredentials><userIdType>CPR</userIdType><userIdValue>2407776666</userIdValue></userCredentials><authCredentials><userIdAut>connector</userIdAut><groupIdAut>190976</groupIdAut><passwordAut>connector-pass</passwordAut></authCredentials></ns2:createAccount></S:Body></S:Envelope>"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-1.4-CulrWebService-tMJpU.xml",
+    "headers" : {
+      "server" : [ "Payara Server Enterprise  5.22.0 #badassfish", "grizzly/2.4.4" ],
+      "x-powered-by" : "Servlet/4.0 JSP/2.3 (Payara Server Enterprise  5.22.0 #badassfish Java/Azul Systems, Inc./11)",
+      "content-type" : "text/xml; charset=utf-8",
+      "x-frame-options" : "SAMEORIGIN"
+    }
+  },
+  "uuid" : "fe6f28b4-5f9b-3a76-b99d-0a10a610d985"
+}

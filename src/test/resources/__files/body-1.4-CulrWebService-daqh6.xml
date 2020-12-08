@@ -1,0 +1,1 @@
+<?xml version='1.0' encoding='UTF-8'?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/"><S:Body><ns2:createAccountResponse xmlns:ns2="http://ws.culrservice.dbc.dk/"><return><responseStatus><responseCode>OK200</responseCode></responseStatus></return></ns2:createAccountResponse></S:Body></S:Envelope>
