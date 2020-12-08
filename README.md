@@ -12,6 +12,20 @@ In pom.xml add this dependency:
     <version>1.0-SNAPSHOT</version>
   </dependency>
 ```
+In your EJB add the following inject:
+```java
+    @Inject
+    private CulrConnector culrConnector;
+```
+
+You must have the following environment variables in your deployment:
+
+    CULR_SERVICE_URL
+
+The following optional environment variables can also be set:
+
+    CULR_CONNECTOR_CONNECT_TIMEOUT_IN_MS (defaults to 2000)
+    CULR_CONNECTOR_REQUEST_TIMEOUT_IN_MS (defaults to 10000)
 
 ### Development
 
