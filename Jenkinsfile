@@ -60,5 +60,17 @@ pipeline {
 				sh "mvn jar:jar deploy:deploy"
 			}
 		}
-	}
+    }
+    post {
+        failure {
+            script {
+                if ("${env.BRANCH_NAME}" == 'master') {
+                    slackSend(channel: "meta-notifications",
+                            color: 'warning',
+                            message: "${env.JOB_NAME} #${env.BUILD_NUMBER} failed and needs attention: ${env.BUILD_URL}",
+                            tokenCredentialId: 'slack-global-integration-token')
+                }
+            }
+        }
+    }
 }
