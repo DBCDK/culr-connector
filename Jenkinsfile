@@ -3,27 +3,29 @@
 def workerNode = "devel10"
 
 pipeline {
-	agent {label workerNode}
-	options {
-		timestamps()
-	}
-	tools {
+    agent {
+        label workerNode
+    }
+    options {
+        timestamps()
+    }
+    tools {
         maven "Maven 3"
     }
     triggers {
         upstream(upstreamProjects: 'culr/culr-gitops/prod/', threshold: hudson.model.Result.SUCCESS)
     }
-	stages {
-		stage("clear workspace") {
+    stages {
+        stage("clear workspace") {
+            steps {
+                deleteDir()
+                checkout scm
+            }
+        }
+        stage("build") {
 			steps {
-				deleteDir()
-				checkout scm
-			}
-		}
-		stage("build") {
-			steps {
-				script {
-					def status = sh returnStatus: true, script:  """
+                script {
+                    def status = sh returnStatus: true, script:  """
                         rm -rf \$WORKSPACE/.repo
                         mvn -B -Dmaven.repo.local=\$WORKSPACE/.repo dependency:resolve dependency:resolve-plugins >/dev/null
                         mvn -B -Dmaven.repo.local=\$WORKSPACE/.repo clean
@@ -51,15 +53,15 @@ pipeline {
                     }
                 }
             }
-		}
-		stage("deploy") {
-			when {
-				branch "master"
-			}
-			steps {
-				sh "mvn jar:jar deploy:deploy"
-			}
-		}
+        }
+        stage("deploy") {
+            when {
+                branch "master"
+            }
+            steps {
+                sh "mvn jar:jar deploy:deploy"
+            }
+        }
     }
     post {
         failure {
