@@ -10,6 +10,9 @@ pipeline {
 	tools {
         maven "Maven 3"
     }
+    triggers {
+        upstream(upstreamProjects: 'culr/culr-gitops/prod/', threshold: hudson.model.Result.SUCCESS)
+    }
 	stages {
 		stage("clear workspace") {
 			steps {
