@@ -33,8 +33,8 @@ public class CulrConnector {
 
     static final String CONNECT_TIMEOUT_PROPERTY   = "com.sun.xml.ws.connect.timeout";
     static final String REQUEST_TIMEOUT_PROPERTY   = "com.sun.xml.ws.request.timeout";
-    static final int DEFAULT_CONNECT_TIMEOUT_IN_MS =  2 * 1000;     //  2 seconds
-    static final int DEFAULT_REQUEST_TIMEOUT_IN_MS = 10 * 1000;     // 10 seconds
+    static final String DEFAULT_CONNECT_TIMEOUT_IN_MS = "2000";  //  2 seconds
+    static final String DEFAULT_REQUEST_TIMEOUT_IN_MS = "10000"; // 10 seconds
 
     private static final RetryPolicy<Object> DEFAULT_RETRY_POLICY = new RetryPolicy<>()
             .handle(WebServiceException.class)
@@ -56,7 +56,7 @@ public class CulrConnector {
     }
 
     CulrConnector(String endpoint, RetryPolicy<Object> retryPolicy) {
-        this(endpoint, retryPolicy, DEFAULT_CONNECT_TIMEOUT_IN_MS, DEFAULT_REQUEST_TIMEOUT_IN_MS);
+        this(endpoint, retryPolicy, Integer.parseInt(DEFAULT_CONNECT_TIMEOUT_IN_MS), Integer.parseInt(DEFAULT_REQUEST_TIMEOUT_IN_MS));
     }
 
     CulrConnector(String endpoint, RetryPolicy<Object> retryPolicy, int connectTimeoutInMs, int requestTimeoutInMs) {
