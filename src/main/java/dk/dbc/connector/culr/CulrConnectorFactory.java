@@ -91,12 +91,12 @@ public class CulrConnectorFactory {
 
     @Inject
     @ConfigProperty(name = "CULR_CONNECTOR_CONNECT_TIMEOUT_IN_MS",
-            defaultValue = CulrConnector.CONNECT_TIMEOUT_PROPERTY)
+            defaultValue = CulrConnector.DEFAULT_CONNECT_TIMEOUT_IN_MS)
     private Integer culrConnectorConnectTimeoutInMs;
 
     @Inject
     @ConfigProperty(name = "CULR_CONNECTOR_REQUEST_TIMEOUT_IN_MS",
-            defaultValue = CulrConnector.REQUEST_TIMEOUT_PROPERTY)
+            defaultValue = CulrConnector.DEFAULT_REQUEST_TIMEOUT_IN_MS)
     private Integer culrConnectorRequestTimeoutInMs;
 
     CulrConnector culrConnector;
