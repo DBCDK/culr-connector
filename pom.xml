@@ -195,6 +195,14 @@
           </excludeRoots>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>4.2.0</version>
+        <configuration>
+          <excludeFilterFile>excludeFilter.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>
