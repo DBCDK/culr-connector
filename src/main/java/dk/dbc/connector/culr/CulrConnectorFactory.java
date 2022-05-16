@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import java.time.Duration;
 
 /**
  * CulrConnector factory
@@ -55,12 +56,12 @@ public class CulrConnectorFactory {
      * @param culrServiceUrl culr service endpoint
      * @param culrConnectorConnectTimeoutInMs connection timeout in milliseconds
      * @param culrConnectorRequestTimeoutInMs request timeout in milliseconds
+     * @param cacheTtl Cache time to live. 0 disables the cache
      * @return new {@link CulrConnector} instance
      */
-    public static CulrConnector create(String culrServiceUrl,
-                                       int culrConnectorConnectTimeoutInMs, int culrConnectorRequestTimeoutInMs) {
-        return new CulrConnector(culrServiceUrl,
-                culrConnectorConnectTimeoutInMs, culrConnectorRequestTimeoutInMs);
+    public static CulrConnector create(String culrServiceUrl, int culrConnectorConnectTimeoutInMs,
+                                       int culrConnectorRequestTimeoutInMs, Duration cacheTtl) {
+        return new CulrConnector(culrServiceUrl, culrConnectorConnectTimeoutInMs, culrConnectorRequestTimeoutInMs, cacheTtl);
     }
 
     /**
@@ -77,12 +78,13 @@ public class CulrConnectorFactory {
      * @param retryPolicy retry policy
      * @param culrConnectorConnectTimeoutInMs connection timeout in milliseconds
      * @param culrConnectorRequestTimeoutInMs request timeout in milliseconds
+     * @param cacheTtl Cache time to live. 0 disables the cache
      * @return new {@link CulrConnector} instance
      */
     public static CulrConnector create(String culrServiceUrl, RetryPolicy<Object> retryPolicy,
-                                       int culrConnectorConnectTimeoutInMs, int culrConnectorRequestTimeoutInMs) {
-        return new CulrConnector(culrServiceUrl, retryPolicy,
-                culrConnectorConnectTimeoutInMs, culrConnectorRequestTimeoutInMs);
+                                       int culrConnectorConnectTimeoutInMs, int culrConnectorRequestTimeoutInMs, Duration cacheTtl) {
+
+        return new CulrConnector(culrServiceUrl, retryPolicy, culrConnectorConnectTimeoutInMs, culrConnectorRequestTimeoutInMs, cacheTtl);
     }
 
     @Inject
@@ -99,12 +101,16 @@ public class CulrConnectorFactory {
             defaultValue = CulrConnector.DEFAULT_REQUEST_TIMEOUT_IN_MS)
     private Integer culrConnectorRequestTimeoutInMs;
 
+    @Inject
+    @ConfigProperty(name = "CULR_CONNECTOR_CACHE_TTL_DURATION", defaultValue = CulrConnector.DEFAULT_CACHE_TTL_DURATION)
+    private Duration cacheTtl;
+
     CulrConnector culrConnector;
 
     @PostConstruct
     public void initializeConnector() {
         culrConnector = CulrConnectorFactory.create(culrServiceUrl,
-                culrConnectorConnectTimeoutInMs, culrConnectorRequestTimeoutInMs);
+                culrConnectorConnectTimeoutInMs, culrConnectorRequestTimeoutInMs, cacheTtl);
     }
 
     @Produces
