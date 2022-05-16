@@ -42,7 +42,7 @@ public class CulrConnector {
     static final String DEFAULT_CONNECT_TIMEOUT_IN_MS = "2000";  //  2 seconds
     static final String DEFAULT_REQUEST_TIMEOUT_IN_MS = "10000"; // 10 seconds
     static final String DEFAULT_CACHE_TTL_DURATION = "PT8H";
-    private Map<CacheKey, GetAccountsByAccountIdResponse> cache;
+    private final Map<CacheKey, GetAccountsByAccountIdResponse> cache;
 
     private static final RetryPolicy<Object> DEFAULT_RETRY_POLICY = new RetryPolicy<>()
             .handle(WebServiceException.class)
