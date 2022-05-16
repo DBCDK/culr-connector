@@ -30,7 +30,7 @@ public class CulrConnectorTestWireMockRecorder {
 
     public static void main(String[] args) throws CulrConnectorException, NoSuchAlgorithmException, KeyManagementException {
         trustEveryone();
-        CulrConnectorTest.culrConnector = new CulrConnector("https://localhost:8443/1.4/CulrWebService",
+        CulrConnectorTest.culrConnector = new CulrConnector("https://localhost:8443/1.6/CulrWebService",
                 CulrConnectorTest.NO_RETRY_POLICY);
         final CulrConnectorTest culrConnectorTest = new CulrConnectorTest();
         recordRequestsForGetAccountFromProvider(culrConnectorTest);
