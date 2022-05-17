@@ -44,7 +44,7 @@ class CulrConnectorTest {
     static void startWireMockServer() {
         wireMockServer = new WireMockServer(options().dynamicPort());
         wireMockServer.start();
-        wireMockHost = "http://localhost:" + wireMockServer.port() + "/1.4/CulrWebService";
+        wireMockHost = "http://localhost:" + wireMockServer.port() + "/1.6/CulrWebService";
         configureFor("localhost", wireMockServer.port());
     }
 
@@ -66,6 +66,7 @@ class CulrConnectorTest {
         final GetAccountsByAccountIdResponse accountFromProvider = culrConnector.getAccountFromProvider(
                 "190976", userCredentials, authCredentials);
         assertThat(accountFromProvider.getResponseStatus().getResponseCode(), is(ResponseCodes.OK_200));
+        assertThat("Entry should be cached", culrConnector.getCacheSize(), is(1));
     }
 
     @Test
@@ -76,6 +77,7 @@ class CulrConnectorTest {
         final GetAccountsByAccountIdResponse accountFromProvider = culrConnector.getAccountFromProvider(
                 "190976", userCredentials, authCredentials);
         assertThat(accountFromProvider.getResponseStatus().getResponseCode(), is(ResponseCodes.ACCOUNT_DOES_NOT_EXIST));
+        assertThat("Entry should not be cached", culrConnector.getCacheSize(), is(0));
     }
 
     @Test
