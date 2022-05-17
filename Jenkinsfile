@@ -10,6 +10,7 @@ pipeline {
         timestamps()
     }
     tools {
+        jdk 'jdk11'
         maven "Maven 3"
     }
     triggers {
