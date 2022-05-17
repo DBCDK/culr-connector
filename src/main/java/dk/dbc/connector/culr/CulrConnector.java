@@ -85,7 +85,9 @@ public class CulrConnector {
 
     public GetAccountsByAccountIdResponse getAccountFromProvider(String agencyId, UserIdValueAndType userCredentials,
                                                                  AuthCredentials authCredentials) throws CulrConnectorException {
-        if(cache == null) return getAccountFromProviderNoCache(agencyId, userCredentials, authCredentials);
+        if(cache == null) {
+            return getAccountFromProviderNoCache(agencyId, userCredentials, authCredentials);
+        }
         CacheKey key = new CacheKey(agencyId, userCredentials, authCredentials);
         GetAccountsByAccountIdResponse response = cache.get(key);
         if(response == null) {
