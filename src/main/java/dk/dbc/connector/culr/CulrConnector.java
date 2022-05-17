@@ -117,6 +117,7 @@ public class CulrConnector {
         }
     }
 
+    @SuppressWarnings("unused")
     public String getEndpoint() {
         return endpoint;
     }
