@@ -59,8 +59,8 @@ public class CulrConnector {
         this(endpoint, DEFAULT_RETRY_POLICY);
     }
 
-    CulrConnector(String endpoint, int connectTimeoutInMs, int requestTimeoutInMs, Duration cacheTll) {
-        this(endpoint, DEFAULT_RETRY_POLICY, connectTimeoutInMs, requestTimeoutInMs, cacheTll);
+    CulrConnector(String endpoint, int connectTimeoutInMs, int requestTimeoutInMs, Duration cacheTtl) {
+        this(endpoint, DEFAULT_RETRY_POLICY, connectTimeoutInMs, requestTimeoutInMs, cacheTtl);
     }
 
     CulrConnector(String endpoint, RetryPolicy<Object> retryPolicy) {
