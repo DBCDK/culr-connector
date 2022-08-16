@@ -5,6 +5,8 @@
 
 package dk.dbc.connector.culr;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import dk.dbc.culrservice.ws.AuthCredentials;
 import dk.dbc.culrservice.ws.CulrResponse;
 import dk.dbc.culrservice.ws.CulrWebService;
@@ -17,16 +19,13 @@ import dk.dbc.culrservice.ws.UserIdValueAndType;
 import dk.dbc.invariant.InvariantUtil;
 import net.jodah.failsafe.Failsafe;
 import net.jodah.failsafe.RetryPolicy;
-import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
 import java.time.Duration;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /**
  * CULR service connector
@@ -42,7 +41,7 @@ public class CulrConnector {
     static final String DEFAULT_CONNECT_TIMEOUT_IN_MS = "2000";  //  2 seconds
     static final String DEFAULT_REQUEST_TIMEOUT_IN_MS = "10000"; // 10 seconds
     static final String DEFAULT_CACHE_TTL_DURATION = "PT8H";
-    private final Map<CacheKey, GetAccountsByAccountIdResponse> cache;
+    private final Cache<CacheKey, GetAccountsByAccountIdResponse> cache;
 
     private static final RetryPolicy<Object> DEFAULT_RETRY_POLICY = new RetryPolicy<>()
             .handle(WebServiceException.class)
@@ -71,14 +70,14 @@ public class CulrConnector {
         this.endpoint = InvariantUtil.checkNotNullNotEmptyOrThrow(endpoint, "endpoint");
         this.retryPolicy = InvariantUtil.checkNotNullOrThrow(retryPolicy, "retryPolicy");
 
-        final CulrWebService_Service culrService = new CulrWebService_Service();
+        CulrWebService_Service culrService = new CulrWebService_Service();
         proxy = culrService.getCulrWebServicePort();
         // We don't want to rely on the endpoint from the WSDL
-        final BindingProvider bindingProvider = (BindingProvider)proxy;
+        BindingProvider bindingProvider = (BindingProvider)proxy;
         bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
         bindingProvider.getRequestContext().put(CONNECT_TIMEOUT_PROPERTY, connectTimeoutInMs);
         bindingProvider.getRequestContext().put(REQUEST_TIMEOUT_PROPERTY, requestTimeoutInMs);
-        cache = cacheTtl.toMillis() == 0 ? null : new PassiveExpiringMap<>(cacheTtl.toMillis(), TimeUnit.MILLISECONDS);
+        cache = CacheBuilder.newBuilder().expireAfterWrite(cacheTtl).recordStats().build();
         LOGGER.info("Created CulrConnector for endpoint {} with retry policy {}, connect timeout in ms {} and request timeout in ms {}",
                 endpoint, retryPolicy, connectTimeoutInMs, requestTimeoutInMs);
     }
@@ -89,7 +88,7 @@ public class CulrConnector {
             return getAccountFromProviderNoCache(agencyId, userCredentials, authCredentials);
         }
         CacheKey key = new CacheKey(agencyId, userCredentials, authCredentials);
-        GetAccountsByAccountIdResponse response = cache.get(key);
+        GetAccountsByAccountIdResponse response = cache.getIfPresent(key);
         if(response == null) {
             response = getAccountFromProviderNoCache(agencyId, userCredentials, authCredentials);
             if(response.getResponseStatus().getResponseCode() == ResponseCodes.OK_200) cache.put(key, response);
@@ -124,7 +123,7 @@ public class CulrConnector {
         return endpoint;
     }
 
-    public int getCacheSize() {
+    public long getCacheSize() {
         return cache.size();
     }
 

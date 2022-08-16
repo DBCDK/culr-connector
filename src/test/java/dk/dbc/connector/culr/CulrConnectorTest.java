@@ -66,7 +66,7 @@ class CulrConnectorTest {
         final GetAccountsByAccountIdResponse accountFromProvider = culrConnector.getAccountFromProvider(
                 "190976", userCredentials, authCredentials);
         assertThat(accountFromProvider.getResponseStatus().getResponseCode(), is(ResponseCodes.OK_200));
-        assertThat("Entry should be cached", culrConnector.getCacheSize(), is(1));
+        assertThat("Entry should be cached", culrConnector.getCacheSize(), is(1L));
     }
 
     @Test
@@ -77,7 +77,7 @@ class CulrConnectorTest {
         final GetAccountsByAccountIdResponse accountFromProvider = culrConnector.getAccountFromProvider(
                 "190976", userCredentials, authCredentials);
         assertThat(accountFromProvider.getResponseStatus().getResponseCode(), is(ResponseCodes.ACCOUNT_DOES_NOT_EXIST));
-        assertThat("Entry should not be cached", culrConnector.getCacheSize(), is(0));
+        assertThat("Entry should not be cached", culrConnector.getCacheSize(), is(0L));
     }
 
     @Test
