@@ -77,7 +77,7 @@ public class CulrConnector {
         bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
         bindingProvider.getRequestContext().put(CONNECT_TIMEOUT_PROPERTY, connectTimeoutInMs);
         bindingProvider.getRequestContext().put(REQUEST_TIMEOUT_PROPERTY, requestTimeoutInMs);
-        cache = CacheBuilder.newBuilder().expireAfterAccess(cacheTtl).recordStats().build();
+        cache = CacheBuilder.newBuilder().expireAfterWrite(cacheTtl).recordStats().build();
         LOGGER.info("Created CulrConnector for endpoint {} with retry policy {}, connect timeout in ms {} and request timeout in ms {}",
                 endpoint, retryPolicy, connectTimeoutInMs, requestTimeoutInMs);
     }
