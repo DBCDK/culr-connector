@@ -1,8 +1,3 @@
-/*
- * Copyright Dansk Bibliotekscenter a/s. Licensed under GPLv3
- * See license text in LICENSE.txt or at https://opensource.dbc.dk/licenses/gpl-3.0/
- */
-
 package dk.dbc.connector.culr;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -44,7 +39,7 @@ class CulrConnectorTest {
     static void startWireMockServer() {
         wireMockServer = new WireMockServer(options().dynamicPort());
         wireMockServer.start();
-        wireMockHost = "http://localhost:" + wireMockServer.port() + "/1.6/CulrWebService";
+        wireMockHost = "http://localhost:" + wireMockServer.port() + "/1.6/CulrWebService"; // We now use 1.7, but the endpoints are unchanged for all our purposes
         configureFor("localhost", wireMockServer.port());
     }
 
