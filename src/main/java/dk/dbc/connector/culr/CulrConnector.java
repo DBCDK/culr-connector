@@ -1,8 +1,3 @@
-/*
- * Copyright Dansk Bibliotekscenter a/s. Licensed under GPLv3
- * See license text in LICENSE.txt or at https://opensource.dbc.dk/licenses/gpl-3.0/
- */
-
 package dk.dbc.connector.culr;
 
 import com.google.common.cache.Cache;
@@ -16,14 +11,13 @@ import dk.dbc.culrservice.ws.GlobalUID;
 import dk.dbc.culrservice.ws.ResponseCodes;
 import dk.dbc.culrservice.ws.UserIdTypes;
 import dk.dbc.culrservice.ws.UserIdValueAndType;
-import dk.dbc.invariant.InvariantUtil;
 import net.jodah.failsafe.Failsafe;
 import net.jodah.failsafe.RetryPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.WebServiceException;
+import jakarta.xml.ws.BindingProvider;
+import jakarta.xml.ws.WebServiceException;
 import java.time.Duration;
 import java.util.Objects;
 
@@ -67,8 +61,17 @@ public class CulrConnector {
     }
 
     CulrConnector(String endpoint, RetryPolicy<Object> retryPolicy, int connectTimeoutInMs, int requestTimeoutInMs, Duration cacheTtl) {
-        this.endpoint = InvariantUtil.checkNotNullNotEmptyOrThrow(endpoint, "endpoint");
-        this.retryPolicy = InvariantUtil.checkNotNullOrThrow(retryPolicy, "retryPolicy");
+        if (endpoint == null) {
+            throw new NullPointerException("Parameter 'endpoint' can not be null in call to CulrConnector(...)");
+        }
+        if (endpoint.isEmpty()) {
+            throw new IllegalArgumentException("Parameter 'endpoint' can not be empty in call to CulrConnector(...)");
+        }
+        if (retryPolicy == null) {
+            throw new NullPointerException("Parameter 'retryPolicy' can not be null in call to CulrConnector(...)");
+        }
+        this.endpoint = endpoint;
+        this.retryPolicy = retryPolicy;
 
         CulrWebService_Service culrService = new CulrWebService_Service();
         proxy = culrService.getCulrWebServicePort();

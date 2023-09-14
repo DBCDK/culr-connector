@@ -1,17 +1,12 @@
-/*
- * Copyright Dansk Bibliotekscenter a/s. Licensed under GPLv3
- * See license text in LICENSE.txt or at https://opensource.dbc.dk/licenses/gpl-3.0/
- */
-
 package dk.dbc.connector.culr;
 
 import net.jodah.failsafe.RetryPolicy;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 import java.time.Duration;
 
 /**
